@@ -1,13 +1,12 @@
 package next.reflection;
 
 import java.lang.reflect.Constructor;
-
+import java.lang.reflect.Method;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.assertj.core.api.Assertions.*;
 
 public class ReflectionTest {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionTest.class);
@@ -18,6 +17,10 @@ public class ReflectionTest {
         SoftAssertions s = new SoftAssertions();
         Class<Question> clazz = Question.class;
         logger.debug("Classs Name {}", clazz.getName());
+
+        for (Method method : clazz.getDeclaredMethods()) {
+            logger.debug("Method : {}", method.getName());
+        }
     }
 
     @Test
