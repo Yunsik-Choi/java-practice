@@ -24,8 +24,20 @@ public class ReflectionTest {
         Class<Question> clazz = Question.class;
         logger.debug("Classs Name {}", clazz.getName());
 
+        for (Constructor<?> constructor : clazz.getConstructors()) {
+            logger.debug(constructor.getName());
+        }
+
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            logger.debug("class : {}, name : {}", declaredField.getDeclaringClass(), declaredField.getName());
+        }
+
         for (Method method : clazz.getDeclaredMethods()) {
-            logger.debug("Method : {}", method.getName());
+            logger.debug("name : {}", method.getName());
+            for (Class<?> parameterType : method.getParameterTypes()) {
+                logger.debug("parameterType : {}", parameterType.getName());
+            }
+            logger.debug("returnType : {}", method.getReturnType());
         }
     }
 
