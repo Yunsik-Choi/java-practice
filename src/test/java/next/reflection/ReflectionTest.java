@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import next.optional.User;
 import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -75,5 +76,21 @@ public class ReflectionTest {
                 () -> assertThat(user.getName()).isEqualTo("재성"),
                 () -> assertThat(user.getAge()).isEqualTo(25)
         );
+    }
+
+    @DisplayName("메서드에 @ElapsedTime 애노테이션이 있을 경우 메소드를 실행하고 수행시간을 측정 및 출력하도록 수현한다.")
+    @Test
+    public void EstimateTime() throws Exception {
+        Class<TimeRunner> clazz = TimeRunner.class;
+
+        long start = System.currentTimeMillis();
+
+        for (Method declaredMethod : clazz.getDeclaredMethods()) {
+            if (declaredMethod.isAnnotationPresent(ElapsedTime.class)) {
+                declaredMethod.invoke(clazz.getDeclaredConstructor().newInstance(), 1000);
+            }
+        }
+
+        assertThat(System.currentTimeMillis() - start).isCloseTo(1000, Offset.offset(500L));
     }
 }
