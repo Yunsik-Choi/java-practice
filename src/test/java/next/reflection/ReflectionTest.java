@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import next.optional.User;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,6 +61,19 @@ public class ReflectionTest {
         assertAll(
                 () -> assertThat(student.getName()).isEqualTo("재성"),
                 () -> assertThat(student.getAge()).isEqualTo(25)
+        );
+    }
+
+    @DisplayName("User 클래스의 인스턴스를 자바 Reflection API를 활용해 User 인스턴스를 생성한다.")
+    @Test
+    public void create() throws Exception {
+        Class<User> clazz = User.class;
+
+        User user = clazz.getDeclaredConstructor(String.class, Integer.class).newInstance("재성", 25);
+
+        assertAll(
+                () -> assertThat(user.getName()).isEqualTo("재성"),
+                () -> assertThat(user.getAge()).isEqualTo(25)
         );
     }
 }
