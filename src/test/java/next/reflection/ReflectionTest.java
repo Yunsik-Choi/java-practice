@@ -1,6 +1,10 @@
 package next.reflection;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +28,7 @@ public class ReflectionTest {
     }
 
     @Test
-    public void constructor() throws Exception {
+    public void constructor() {
         Class<Question> clazz = Question.class;
         Constructor[] constructors = clazz.getConstructors();
         for (Constructor constructor : constructors) {
@@ -34,5 +38,28 @@ public class ReflectionTest {
                 logger.debug("param type : {}", paramType);
             }
         }
+    }
+
+    @Test
+    public void privateFieldAccess() throws Exception {
+        Class<Student> clazz = Student.class;
+        logger.debug(clazz.getName());
+
+        Student student = clazz.getDeclaredConstructor().newInstance();
+
+        Field name = clazz.getDeclaredField("name");
+        name.setAccessible(true);
+        name.set(student, "재성");
+        name.setAccessible(false);
+
+        Field age = clazz.getDeclaredField("age");
+        age.setAccessible(true);
+        age.set(student, 25);
+        age.setAccessible(false);
+
+        assertAll(
+                () -> assertThat(student.getName()).isEqualTo("재성"),
+                () -> assertThat(student.getAge()).isEqualTo(25)
+        );
     }
 }
